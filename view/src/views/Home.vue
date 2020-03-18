@@ -8,7 +8,10 @@
     <ul>
       <li v-for="item in items"
           :key="item.id">
-        {{ item.title }}
+        <button>done</button>
+        <div :class="{ done: item.done }">
+          {{ item.title }}
+        </div>
       </li>
     </ul>
   </div>
@@ -22,11 +25,13 @@
         items: [
           {
             id: 1,
-            title: "Todo 1"
+            title: "Todo 1",
+            done: false
           },
           {
             id: 2,
-            title: "Todo 2"
+            title: "Todo 2",
+            done: true
           }
         ]
       }
@@ -42,3 +47,8 @@
     }
   }
 </script>
+<style scoped>
+.done {
+  text-decoration: line-through;
+}
+</style>
