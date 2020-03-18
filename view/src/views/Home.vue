@@ -8,7 +8,9 @@
     <ul>
       <li v-for="item in items"
           :key="item.id">
-        <button>done</button>
+        <button @click="toggle_item_progress(item)">
+          done
+        </button>
         <div :class="{ done: item.done }">
           {{ item.title }}
         </div>
@@ -43,6 +45,11 @@
           title: this.newitem_title
         });
         this.newitem_title = '';
+      },
+      toggle_item_progress(item) {
+        item.done = !item.done;
+        let target_idx = this.items.findIndex(i => i.id === item.id);
+        this.items.splice(target_idx, 1, item);
       }
     }
   }
