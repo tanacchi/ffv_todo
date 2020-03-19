@@ -8,9 +8,7 @@
       <li v-for="item in items"
           :key="item.id"
           class="item-row">
-        <button @click="toggle_item_progress(item)">
-          done
-        </button>
+        <input type="checkbox" :checked="item.done" @change="toggle_item_progress(item)">
         <div :class="{ done: item.done }">
           {{ item.title }}
         </div>
