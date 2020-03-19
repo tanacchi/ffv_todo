@@ -1,11 +1,13 @@
 <template>
   <div class="list">
-    <input v-model="newitem_title"
-           @keypress.enter="add_item">
-    <p>{{ newitem_title }}</p>
+    <div class="new-item-form">
+      <input v-model="newitem_title"
+             @keypress.enter="add_item">
+    </div>
     <ul>
       <li v-for="item in items"
-          :key="item.id">
+          :key="item.id"
+          class="item-row">
         <button @click="toggle_item_progress(item)">
           done
         </button>
@@ -53,7 +55,33 @@
   }
 </script>
 <style scoped>
+.list {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .done {
   text-decoration: line-through;
+}
+.item-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new-item-form {
+  width: 80%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+}
+input.new-item-form {
+  width: 100%;
+  padding: 6px;
+  border: solid 1px grey;
+  border-radius: 3px;
+}
+input.new-item-form:hover {
+  border-color: orange;
 }
 </style>
