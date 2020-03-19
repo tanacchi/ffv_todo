@@ -4,16 +4,14 @@
       <input v-model="newitem_title"
              @keypress.enter="add_item">
     </div>
-    <ul>
-      <li v-for="item in items"
-          :key="item.id"
-          class="item-row">
-        <input type="checkbox" :checked="item.done" @change="toggle_item_progress(item)">
-        <div :class="{ done: item.done }">
-          {{ item.title }}
-        </div>
-      </li>
-    </ul>
+    <label v-for="item in items"
+           :key="item.id"
+           class="item-row">
+      <input type="checkbox" :checked="item.done" @change="toggle_item_progress(item)">
+      <span :class="{ done: item.done }">
+        {{ item.title }}
+      </span>
+    </label>
   </div>
 </template>
 <script>
@@ -63,8 +61,10 @@
 }
 .item-row {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
 }
 .new-item-form {
   width: 80%;
