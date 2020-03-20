@@ -5,8 +5,8 @@ from flask import (
 from flask_cors import CORS
 
 app = Flask(__name__,
-            template_folder='./view/dist',
-            static_folder='./view/dist')
+            template_folder='./dist',
+            static_folder='./dist')
 CORS(app)
 
 #  @app.route('/<path:path>')
@@ -21,7 +21,7 @@ def root():
 
 @app.route('/<path:path>')
 def file(path):
-    return send_from_directory('./view/dist', path)
+    return send_from_directory('./dist', path)
 
 @app.route('/api/items')
 def todo_items():
