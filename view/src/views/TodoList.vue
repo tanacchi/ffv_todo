@@ -29,7 +29,7 @@
       const get_items_url = 'http://localhost:5000' + '/api/items';
       axios.get(get_items_url)
            .then(response => {
-             console.log(response);
+             this.items = response.data;
            });
     },
     methods: {
