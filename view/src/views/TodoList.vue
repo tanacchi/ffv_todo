@@ -15,24 +15,23 @@
   </div>
 </template>
 <script>
-  module.exports = {
+  import axios from 'axios'
+
+  export default {
     data: function() {
       return {
         newitem_title: '',
-        newitem_id: 3,
-        items: [
-          {
-            id: 1,
-            title: "Todo 1",
-            done: false
-          },
-          {
-            id: 2,
-            title: "Todo 2",
-            done: true
-          }
-        ]
+        newitem_id: 1,
+        items: []
       }
+    },
+    mounted: function() {
+      const get_items_url = 'http://localhost:5000' + '/api/items';
+      axios.get(get_items_url)
+           .then(response => {
+             this.items = response.data;
+             this.newitem_id = this.items.length > 0 ? this.items.slice(-1)[0].id + 1 : 1;
+           });
     },
     methods: {
       add_item: function() {
