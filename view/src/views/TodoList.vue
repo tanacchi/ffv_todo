@@ -15,13 +15,22 @@
   </div>
 </template>
 <script>
-  module.exports = {
+  import axios from 'axios'
+
+  export default {
     data: function() {
       return {
         newitem_title: '',
         newitem_id: 3,
         items: []
       }
+    },
+    mounted: function() {
+      const get_items_url = 'http://localhost:5000' + '/api/items';
+      axios.get(get_items_url)
+           .then(response => {
+             console.log(response);
+           });
     },
     methods: {
       add_item: function() {
