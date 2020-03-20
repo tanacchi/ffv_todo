@@ -20,18 +20,7 @@
       return {
         newitem_title: '',
         newitem_id: 3,
-        items: [
-          {
-            id: 1,
-            title: "Todo 1",
-            done: false
-          },
-          {
-            id: 2,
-            title: "Todo 2",
-            done: true
-          }
-        ]
+        items: []
       }
     },
     methods: {
