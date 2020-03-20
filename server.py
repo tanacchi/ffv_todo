@@ -2,10 +2,12 @@ from flask import (
     Flask, render_template, send_from_directory,
     jsonify,
 )
+from flask_cors import CORS
 
 app = Flask(__name__,
             template_folder='./view/dist',
             static_folder='./view/dist')
+CORS(app)
 
 #  @app.route('/<path:path>')
 #  @app.route('/', defaults={'path': ''})
