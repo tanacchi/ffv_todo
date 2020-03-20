@@ -21,7 +21,7 @@
     data: function() {
       return {
         newitem_title: '',
-        newitem_id: 3,
+        newitem_id: 1,
         items: []
       }
     },
@@ -30,6 +30,7 @@
       axios.get(get_items_url)
            .then(response => {
              this.items = response.data;
+             this.newitem_id = this.items.length > 0 ? this.items.slice(-1)[0].id + 1 : 1;
            });
     },
     methods: {
