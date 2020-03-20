@@ -1,4 +1,7 @@
-from flask import Flask, render_template, send_from_directory
+from flask import (
+    Flask, render_template, send_from_directory,
+    jsonify,
+)
 
 app = Flask(__name__,
             template_folder='./view/dist',
@@ -18,5 +21,12 @@ def root():
 def file(path):
     return send_from_directory('./view/dist', path)
 
+@app.route('/api/items')
+def todo_items():
+    items = [
+        { 'id': 1, 'title': "Todo Item 1", 'done': False },
+        { 'id': 2, 'title': "Todo Item 2", 'done': True  }
+    ]
+    return jsonify(items)
 
 app.run(debug=True)
