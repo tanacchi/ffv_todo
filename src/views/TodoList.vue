@@ -26,7 +26,8 @@
       }
     },
     mounted: function() {
-      const get_items_url = 'http://localhost:5000' + '/api/items';
+      const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
+      const get_items_url = api_baseurl + 'api/items';
       axios.get(get_items_url)
            .then(response => {
              this.items = response.data;
