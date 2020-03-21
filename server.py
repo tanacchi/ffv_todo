@@ -30,10 +30,10 @@ def file(path):
 @app.route('/api/items')
 def todo_items():
     #  items = db_items.stream()
-    items = [
-        { 'id': 1, 'title': "Todo Item 1", 'done': False },
-        { 'id': 2, 'title': "Todo Item 2", 'done': True  }
-    ]
+    items = {
+        '1': {'title': "Todo Item 1", 'done': False },
+        '2': {'title': "Todo Item 2", 'done': True  }
+    }
     return jsonify(items)
 
 
