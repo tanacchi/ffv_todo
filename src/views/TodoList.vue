@@ -17,6 +17,8 @@
 <script>
   import axios from 'axios'
 
+  const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
+
   export default {
     data: function() {
       return {
@@ -26,7 +28,6 @@
       }
     },
     mounted: function() {
-      const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
       const get_items_url = api_baseurl + 'api/items';
       axios.get(get_items_url)
            .then(response => {
@@ -50,6 +51,11 @@
       toggle_item_progress(id, item) {
         item.done = !item.done;
         this.$set(this.items, id, item);
+        const get_items_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
+        axios.get(get_items_url)
+             .then(response => {
+               console.log(`progress updated. ${response}`)
+             });
       }
     }
   }

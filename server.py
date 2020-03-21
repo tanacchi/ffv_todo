@@ -38,6 +38,7 @@ def update_item(item_id):
     target_item = db_items.document(item_id)
     done = {"true": True, "false": False}[request.args.get('done')]
     target_item.update({u'done': done})
+    return jsonify({})
 
 
 if __name__ == '__main__':
