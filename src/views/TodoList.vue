@@ -45,14 +45,22 @@
             done: false
           }
         );
-        this.newitem_title = '';
-        this.newitem_id++;
+        const create_item_url = api_baseurl + 'api/items/create';
+        axios.post(create_item_url, {
+                id: this.newitem_id.toString(),
+                title: this.newitem_title,
+              })
+             .then(response => {
+               this.newitem_title = '';
+               this.newitem_id++;
+               console.log(`item created. ${response}`)
+             });
       },
       toggle_item_progress(id, item) {
         item.done = !item.done;
         this.$set(this.items, id, item);
-        const get_items_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
-        axios.get(get_items_url)
+        const update_progress_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
+        axios.get(update_progress_url)
              .then(response => {
                console.log(`progress updated. ${response}`)
              });
