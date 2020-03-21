@@ -29,11 +29,8 @@ def file(path):
 
 @app.route('/api/items')
 def todo_items():
-    #  items = db_items.stream()
-    items = {
-        '1': {'title': "Todo Item 1", 'done': False },
-        '2': {'title': "Todo Item 2", 'done': True  }
-    }
+    docs = db_items.stream()
+    items = { doc.id: doc.to_dict() for doc in docs }
     return jsonify(items)
 
 
