@@ -22,7 +22,7 @@
       return {
         newitem_title: '',
         newitem_id: 1,
-        items: []
+        items: {}
       }
     },
     mounted: function() {
@@ -31,16 +31,21 @@
       axios.get(get_items_url)
            .then(response => {
              this.items = response.data;
-             this.newitem_id = this.items.length > 0 ? this.items.slice(-1)[0].id + 1 : 1;
+             this.newitem_id = Object.keys(this.items).length + 1;
            });
     },
     methods: {
       add_item: function() {
-        this.items.push({
-          id: this.newitem_id++,
-          title: this.newitem_title
-        });
+        this.$set(
+          this.items,
+          this.newitem_id.toString(),
+          {
+            title: this.newitem_title,
+            done: false
+          }
+        );
         this.newitem_title = '';
+        this.newitem_id++;
       },
       toggle_item_progress(item) {
         item.done = !item.done;
