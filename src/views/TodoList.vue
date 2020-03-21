@@ -4,10 +4,10 @@
       <input v-model="newitem_title"
              @keypress.enter="add_item">
     </div>
-    <label v-for="item in items"
-           :key="item.id"
+    <label v-for="(item, id) in items"
+           :key="id"
            class="item-row">
-      <input type="checkbox" :checked="item.done" @change="toggle_item_progress(item)">
+      <input type="checkbox" :checked="item.done" @change="toggle_item_progress(id, item)">
       <span :class="{ done: item.done }">
         {{ item.title }}
       </span>
@@ -47,10 +47,9 @@
         this.newitem_title = '';
         this.newitem_id++;
       },
-      toggle_item_progress(item) {
+      toggle_item_progress(id, item) {
         item.done = !item.done;
-        let target_idx = this.items.findIndex(i => i.id === item.id);
-        this.items.splice(target_idx, 1, item);
+        this.$set(this.items, id, item);
       }
     }
   }
