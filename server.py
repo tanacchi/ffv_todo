@@ -1,6 +1,6 @@
 from flask import (
     Flask, render_template, send_from_directory,
-    jsonify,
+    jsonify, request
 )
 from flask_cors import CORS
 
@@ -32,6 +32,12 @@ def todo_items():
     docs = db_items.stream()
     items = { doc.id: doc.to_dict() for doc in docs }
     return jsonify(items)
+
+@app.route('/api/items/<string:item_id>')
+def update_item(item_id):
+    target_item = db_items.document(item_id)
+    done = {"true": True, "false": False}[request.args.get('done')]
+    target_item.update({u'done': done})
 
 
 if __name__ == '__main__':
