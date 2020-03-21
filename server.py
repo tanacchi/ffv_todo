@@ -40,6 +40,16 @@ def update_item(item_id):
     target_item.update({u'done': done})
     return jsonify({})
 
+@app.route('/api/items/create', methods=['POST'])
+def create_item():
+    post_data = request.get_data()
+    item_id = post_data['id']
+    newitem = {
+        u'title': post_data['title'],
+        u'done': False
+    }
+    db_items.document(item_id).set(newitem)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
