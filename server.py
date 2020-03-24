@@ -1,3 +1,5 @@
+import os
+
 from flask import (
     Flask, render_template, send_from_directory,
     jsonify, request
@@ -14,8 +16,20 @@ app = Flask(__name__,
             static_folder='./dist')
 CORS(app)
 
-cred = credentials.Certificate('ffv-todo-app-firebase-adminsdk-4sdgu-9157c7cf91.json')
+FIREBASE_CONFIG_PROPERTIES = (
+    'FIREBASE_AUTH_TYPE', 'FIREBASE_AUTH_PROJECT_ID', 'FIREBASE_AUTH_PRIVATE_KEY_ID',
+    'FIREBASE_AUTH_PRIVATE_KEY', 'FIREBASE_AUTH_CLIENT_EMAIL', 'FIREBASE_AUTH_CLIENT_ID',
+    'FIREBASE_AUTH_AUTH_URI', 'FIREBASE_AUTH_TOKEN_URI', 'FIREBASE_AUTH_AUTH_PROVIDER_X509_CERT_URL',
+    'FIREBASE_AUTH_CLIENT_X509_CERT_URL',
+)
+FIREBASE_CONFIG = {
+    cfg_property[len('FIREBASE_AUTH_'):].lower() : os.environ[cfg_property] for cfg_property in FIREBASE_CONFIG_PROPERTIES
+}
+
+cred = credentials.Certificate(FIREBASE_CONFIG)
 firebase = firebase_admin.initialize_app(cred)
+del FIREBASE_CONFIG_PROPERTIES, FIREBASE_CONFIG
+
 db = firestore.client()
 db_items = db.collection(u'items')
 
