@@ -2,7 +2,7 @@ import os
 
 from flask import (
     Flask, render_template, send_from_directory,
-    jsonify, request
+    jsonify, request, redirect
 )
 from flask_cors import CORS
 
@@ -65,6 +65,10 @@ def create_item():
     }
     db_items.document(item_id).set(newitem)
     return jsonify({"status": 202})
+
+@app.errorhandler(404)
+def notfound_error(error):
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
