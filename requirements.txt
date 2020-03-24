@@ -1,3 +1,5 @@
+firebase-admin
 flask
 flask_cors
 gunicorn
+setuptools>=40.3.0

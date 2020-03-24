@@ -4,10 +4,10 @@
       <input v-model="newitem_title"
              @keypress.enter="add_item">
     </div>
-    <label v-for="item in items"
-           :key="item.id"
+    <label v-for="(item, id) in items"
+           :key="id"
            class="item-row">
-      <input type="checkbox" :checked="item.done" @change="toggle_item_progress(item)">
+      <input type="checkbox" :checked="item.done" @change="toggle_item_progress(id, item)">
       <span :class="{ done: item.done }">
         {{ item.title }}
       </span>
@@ -17,35 +17,53 @@
 <script>
   import axios from 'axios'
 
+  const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
+
   export default {
     data: function() {
       return {
         newitem_title: '',
         newitem_id: 1,
-        items: []
+        items: {}
       }
     },
     mounted: function() {
-      const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
       const get_items_url = api_baseurl + 'api/items';
       axios.get(get_items_url)
            .then(response => {
              this.items = response.data;
-             this.newitem_id = this.items.length > 0 ? this.items.slice(-1)[0].id + 1 : 1;
+             this.newitem_id = Object.keys(this.items).length + 1;
            });
     },
     methods: {
       add_item: function() {
-        this.items.push({
-          id: this.newitem_id++,
-          title: this.newitem_title
-        });
-        this.newitem_title = '';
+        this.$set(
+          this.items,
+          this.newitem_id.toString(),
+          {
+            title: this.newitem_title,
+            done: false
+          }
+        );
+        const create_item_url = api_baseurl + 'api/items/create';
+        axios.post(create_item_url, {
+                id: this.newitem_id.toString(),
+                title: this.newitem_title,
+              })
+             .then(response => {
+               this.newitem_title = '';
+               this.newitem_id++;
+               console.log(`item created. ${response}`)
+             });
       },
-      toggle_item_progress(item) {
+      toggle_item_progress(id, item) {
         item.done = !item.done;
-        let target_idx = this.items.findIndex(i => i.id === item.id);
-        this.items.splice(target_idx, 1, item);
+        this.$set(this.items, id, item);
+        const update_progress_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
+        axios.get(update_progress_url)
+             .then(response => {
+               console.log(`progress updated. ${response}`)
+             });
       }
     }
   }
