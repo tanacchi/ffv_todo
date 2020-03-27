@@ -32,6 +32,7 @@ del FIREBASE_CONFIG_PROPERTIES, FIREBASE_CONFIG
 
 db = firestore.client()
 db_items = db.collection(u'items')
+db_lists = db.collection(u'lists')
 
 @app.route('/')
 def root():
@@ -65,6 +66,13 @@ def create_item():
     }
     db_items.document(item_id).set(newitem)
     return jsonify({"status": 202})
+
+@app.route('/api/lists')
+def todo_lists():
+    docs = db_lists.stream()
+    lists = { doc.id: doc.to_dict()['name'] for doc in docs }
+    print(lists)
+    return jsonify(lists)
 
 @app.errorhandler(404)
 def notfound_error(error):
