@@ -74,6 +74,13 @@ def todo_lists():
     print(lists)
     return jsonify(lists)
 
+@app.route('/api/lists/<string:list_id>')
+def list_show(list_id):
+    target_list = db_lists.document(list_id).get().to_dict()
+    items = { doc.id: doc.get().to_dict() for doc in target_list['items']}
+    target_list.update({'items': items})
+    return jsonify(target_list)
+
 @app.errorhandler(404)
 def notfound_error(error):
     return render_template('index.html')
