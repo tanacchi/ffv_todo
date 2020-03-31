@@ -24,14 +24,16 @@
       return {
         newitem_title: '',
         newitem_id: 1,
+        list_name: '',
         items: {}
       }
     },
     mounted: function() {
-      const get_items_url = api_baseurl + 'api/items';
+      const get_items_url = api_baseurl + 'api/lists/' + this.$route.params.id;
       axios.get(get_items_url)
            .then(response => {
-             this.items = response.data;
+             this.list_name = response.data.name;
+             this.items = response.data.items;
              this.newitem_id = Object.keys(this.items).length + 1;
            });
     },
