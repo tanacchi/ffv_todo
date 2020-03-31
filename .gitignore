@@ -28,3 +28,6 @@ yarn-error.log*
 
 # Firebase config files
 *firebase-adminsdk*
+
+#Electron-builder output
+/dist_electron
