@@ -70,7 +70,7 @@ def create_item():
 @app.route('/api/lists')
 def todo_lists():
     docs = db_lists.stream()
-    lists = { doc.id: doc.to_dict()['name'] for doc in docs }
+    lists = { doc.id: {'name': doc.to_dict()['name']} for doc in docs }
     print(lists)
     return jsonify(lists)
 
