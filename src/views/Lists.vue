@@ -3,7 +3,10 @@
     <p v-for="(list, id) in lists"
            :key="id"
            class="">
-      <span>{{ list.name }}</span>
+    <router-link
+      :to="{name: 'TodoList', params: {id: id}}">
+      {{ list.name }}
+    </router-link>
     </p>
   </div>
 </template>
