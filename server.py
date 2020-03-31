@@ -42,12 +42,6 @@ def root():
 def file(path):
     return send_from_directory('./dist', path)
 
-@app.route('/api/items')
-def todo_items():
-    docs = db_items.stream()
-    items = { doc.id: doc.to_dict() for doc in docs }
-    return jsonify(items)
-
 @app.route('/api/items/<string:item_id>')
 def update_item(item_id):
     target_item = db_items.document(item_id)
