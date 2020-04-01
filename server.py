@@ -52,20 +52,19 @@ def update_item(item_id):
 @app.route('/api/items/create', methods=['POST'])
 def create_item():
     post_data = request.get_json()
-    item_id = post_data['id']
+    list_id = post_data['list_id']
     title = post_data['title']
     newitem = {
         u'title': title,
         u'done': False
     }
-    db_items.document(item_id).set(newitem)
+    target_list = db_lists.document(list_id).collection(u'items').document().set(newitem)
     return jsonify({"status": 202})
 
 @app.route('/api/lists')
 def todo_lists():
     docs = db_lists.stream()
     lists = { doc.id: {'name': doc.to_dict()['name']} for doc in docs }
-    print(lists)
     return jsonify(lists)
 
 @app.route('/api/lists/create', methods=['POST'])
@@ -81,7 +80,8 @@ def create_list():
 @app.route('/api/lists/<string:list_id>')
 def list_show(list_id):
     target_list = db_lists.document(list_id).get().to_dict()
-    items = { doc.id: doc.get().to_dict() for doc in target_list['items']}
+    items = db_lists.document(list_id).collection(u'items').stream()
+    items = { doc.id: doc.to_dict() for doc in items }
     target_list.update({'items': items})
     return jsonify(target_list)
 

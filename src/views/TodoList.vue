@@ -49,7 +49,7 @@
         );
         const create_item_url = api_baseurl + 'api/items/create';
         axios.post(create_item_url, {
-                id: this.newitem_id.toString(),
+                list_id: this.$route.params.id,
                 title: this.newitem_title,
               })
              .then(response => {
