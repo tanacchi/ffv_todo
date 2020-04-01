@@ -1,5 +1,6 @@
 <template>
   <div class="lists">
+    <new-list-form />
     <p v-for="(list, id) in lists"
            :key="id"
            class="">
@@ -12,10 +13,14 @@
 </template>
 <script>
   import axios from 'axios'
+  import NewListForm from "@/components/NewListForm.vue"
 
   const apiBaseURL = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000';
 
   export default {
+    components: {
+      NewListForm,
+    },
     data: function() {
       return {
         lists: {}
