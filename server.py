@@ -68,6 +68,16 @@ def todo_lists():
     print(lists)
     return jsonify(lists)
 
+@app.route('/api/lists/create', methods=['POST'])
+def create_list():
+    post_data = request.get_json()
+    name = post_data['name']
+    newlist = {
+        u'name': name,
+    }
+    db_lists.document().set(newlist)
+    return jsonify({"status": 202})
+
 @app.route('/api/lists/<string:list_id>')
 def list_show(list_id):
     target_list = db_lists.document(list_id).get().to_dict()
