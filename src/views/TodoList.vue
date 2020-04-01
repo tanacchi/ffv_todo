@@ -61,8 +61,12 @@
       toggle_item_progress(id, item) {
         item.done = !item.done;
         this.$set(this.items, id, item);
-        const update_progress_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
-        axios.get(update_progress_url)
+        const update_progress_url = api_baseurl + 'api/items';
+        axios.post(update_progress_url, {
+                list_id: this.$route.params.id,
+                item_id: id,
+                done: item.done.toString(),
+              })
              .then(response => {
                console.log(`progress updated. ${response}`)
              });

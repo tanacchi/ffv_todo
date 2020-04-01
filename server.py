@@ -42,10 +42,14 @@ def root():
 def file(path):
     return send_from_directory('./dist', path)
 
-@app.route('/api/items/<string:item_id>')
-def update_item(item_id):
-    target_item = db_items.document(item_id)
-    done = {"true": True, "false": False}[request.args.get('done')]
+@app.route('/api/items', methods=['POST'])
+def update_item():
+    post_data = request.get_json()
+    list_id = post_data['list_id']
+    item_id = post_data['item_id']
+
+    target_item = db_lists.document(list_id).collection(u'items').document(item_id)
+    done = {"true": True, "false": False}[post_data['done']]
     target_item.update({u'done': done})
     return jsonify({"status": 202})
 
