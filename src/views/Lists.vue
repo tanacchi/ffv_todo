@@ -1,6 +1,6 @@
 <template>
   <div class="lists">
-    <new-list-form />
+    <new-list-form v-on:list-created="fetchList" />
     <p v-for="(list, id) in lists"
            :key="id"
            class="">
@@ -26,13 +26,18 @@
         lists: {}
       }
     },
+    methods: {
+      fetchList: function() {
+        const lists_uri = apiBaseURL + 'api/lists';
+        axios.get(lists_uri)
+             .then(response => {
+               this.lists = response.data;
+             });
+        console.log("lists: " + this.lists);
+      }
+    },
     mounted: function() {
-      const lists_uri = apiBaseURL + 'api/lists';
-      axios.get(lists_uri)
-           .then(response => {
-             this.lists = response.data;
-           });
-      console.log("lists: " + this.lists);
+      this.fetchList();
     }
   }
 </script>

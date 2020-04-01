@@ -23,6 +23,8 @@
               })
              .then(response => {
                console.log(response);
+               this.newListName = "";
+               this.$emit('list-created');
              });
       }
     },
