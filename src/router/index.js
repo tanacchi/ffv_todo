@@ -21,10 +21,17 @@ const routes = [
     }
   },
   {
-    path: '/list',
+    path: '/lists/:id',
     name: 'TodoList',
     component: function () {
       return import('../views/TodoList.vue')
+    }
+  },
+  {
+    path: '/lists',
+    name: 'Lists',
+    component: function () {
+      return import('../views/Lists.vue')
     }
   }
 ]

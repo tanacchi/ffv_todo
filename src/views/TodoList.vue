@@ -24,14 +24,16 @@
       return {
         newitem_title: '',
         newitem_id: 1,
+        list_name: '',
         items: {}
       }
     },
     mounted: function() {
-      const get_items_url = api_baseurl + 'api/items';
+      const get_items_url = api_baseurl + 'api/lists/' + this.$route.params.id;
       axios.get(get_items_url)
            .then(response => {
-             this.items = response.data;
+             this.list_name = response.data.name;
+             this.items = response.data.items;
              this.newitem_id = Object.keys(this.items).length + 1;
            });
     },
@@ -47,7 +49,7 @@
         );
         const create_item_url = api_baseurl + 'api/items/create';
         axios.post(create_item_url, {
-                id: this.newitem_id.toString(),
+                list_id: this.$route.params.id,
                 title: this.newitem_title,
               })
              .then(response => {
@@ -59,8 +61,12 @@
       toggle_item_progress(id, item) {
         item.done = !item.done;
         this.$set(this.items, id, item);
-        const update_progress_url = api_baseurl + `api/items/${id}?done=${item.done.toString()}`;
-        axios.get(update_progress_url)
+        const update_progress_url = api_baseurl + 'api/items';
+        axios.post(update_progress_url, {
+                list_id: this.$route.params.id,
+                item_id: id,
+                done: item.done.toString(),
+              })
              .then(response => {
                console.log(`progress updated. ${response}`)
              });

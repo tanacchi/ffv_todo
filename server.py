@@ -32,6 +32,7 @@ del FIREBASE_CONFIG_PROPERTIES, FIREBASE_CONFIG
 
 db = firestore.client()
 db_items = db.collection(u'items')
+db_lists = db.collection(u'lists')
 
 @app.route('/')
 def root():
@@ -41,30 +42,52 @@ def root():
 def file(path):
     return send_from_directory('./dist', path)
 
-@app.route('/api/items')
-def todo_items():
-    docs = db_items.stream()
-    items = { doc.id: doc.to_dict() for doc in docs }
-    return jsonify(items)
+@app.route('/api/items', methods=['POST'])
+def update_item():
+    post_data = request.get_json()
+    list_id = post_data['list_id']
+    item_id = post_data['item_id']
 
-@app.route('/api/items/<string:item_id>')
-def update_item(item_id):
-    target_item = db_items.document(item_id)
-    done = {"true": True, "false": False}[request.args.get('done')]
+    target_item = db_lists.document(list_id).collection(u'items').document(item_id)
+    done = {"true": True, "false": False}[post_data['done']]
     target_item.update({u'done': done})
     return jsonify({"status": 202})
 
 @app.route('/api/items/create', methods=['POST'])
 def create_item():
     post_data = request.get_json()
-    item_id = post_data['id']
+    list_id = post_data['list_id']
     title = post_data['title']
     newitem = {
         u'title': title,
         u'done': False
     }
-    db_items.document(item_id).set(newitem)
+    target_list = db_lists.document(list_id).collection(u'items').document().set(newitem)
     return jsonify({"status": 202})
+
+@app.route('/api/lists')
+def todo_lists():
+    docs = db_lists.stream()
+    lists = { doc.id: {'name': doc.to_dict()['name']} for doc in docs }
+    return jsonify(lists)
+
+@app.route('/api/lists/create', methods=['POST'])
+def create_list():
+    post_data = request.get_json()
+    name = post_data['name']
+    newlist = {
+        u'name': name,
+    }
+    db_lists.document().set(newlist)
+    return jsonify({"status": 202})
+
+@app.route('/api/lists/<string:list_id>')
+def list_show(list_id):
+    target_list = db_lists.document(list_id).get().to_dict()
+    items = db_lists.document(list_id).collection(u'items').stream()
+    items = { doc.id: doc.to_dict() for doc in items }
+    target_list.update({'items': items})
+    return jsonify(target_list)
 
 @app.errorhandler(404)
 def notfound_error(error):
