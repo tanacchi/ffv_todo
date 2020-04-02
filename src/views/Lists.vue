@@ -13,7 +13,7 @@
 </template>
 <script>
   import axios from 'axios'
-  import NewListForm from "@/components/NewListForm.vue"
+  import NewListForm from "@/components/lists/NewListForm.vue"
 
   const apiBaseURL = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000';
 
