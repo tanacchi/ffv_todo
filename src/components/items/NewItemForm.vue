@@ -33,4 +33,20 @@
   };
 </script>
 <style scoped>
+.new-item-form {
+  width: 80%;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: center;
+}
+input.new-item-form {
+  width: 100%;
+  padding: 6px;
+  border: solid 1px grey;
+  border-radius: 3px;
+}
+input.new-item-form:hover {
+  border-color: orange;
+}
 </style>
