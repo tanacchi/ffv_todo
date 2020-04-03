@@ -1,9 +1,6 @@
 <template>
   <div class="list">
-    <div class="new-item-form">
-      <input v-model="newitem_title"
-             @keypress.enter="add_item">
-    </div>
+    <new-item-form @item-added="push_item" />
     <label v-for="(item, id) in items"
            :key="id"
            class="item-row">
@@ -16,13 +13,16 @@
 </template>
 <script>
   import axios from 'axios'
+  import NewItemForm from "@/components/items/NewItemForm.vue"
 
   const api_baseurl = process.env.VUE_APP_API_BASEURL ? process.env.VUE_APP_API_BASEURL : 'http://localhost:5000/';
 
   export default {
+    components: {
+      NewItemForm,
+    },
     data: function() {
       return {
-        newitem_title: '',
         newitem_id: 1,
         list_name: '',
         items: {}
@@ -38,25 +38,15 @@
            });
     },
     methods: {
-      add_item: function() {
+      push_item: function(title) {
         this.$set(
           this.items,
           this.newitem_id.toString(),
           {
-            title: this.newitem_title,
+            title: title,
             done: false
           }
         );
-        const create_item_url = api_baseurl + 'api/items/create';
-        axios.post(create_item_url, {
-                list_id: this.$route.params.id,
-                title: this.newitem_title,
-              })
-             .then(response => {
-               this.newitem_title = '';
-               this.newitem_id++;
-               console.log(`item created. ${response}`)
-             });
       },
       toggle_item_progress(id, item) {
         item.done = !item.done;
